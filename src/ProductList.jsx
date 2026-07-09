@@ -7,7 +7,6 @@ import CartItem from './CartItem';
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); 
-    const [addedToCart, setAddedToCart] = useState({});
 
     const dispatch = useDispatch();
     
@@ -106,10 +105,6 @@ function ProductList({ onHomeClick }) {
 
     const handleAddToCart = (product) => {
         dispatch(addItem(product)); 
-        setAddedToCart((prevState) => ({
-            ...prevState,
-            [product.name]: true, 
-        }));
     };
 
     return (
@@ -167,10 +162,10 @@ function ProductList({ onHomeClick }) {
                                         <div className="product-cost">{plant.cost}</div>
                                         <button
                                             className="product-button"
-                                            disabled={addedToCart[plant.name]} 
+                                            disabled={cartItems.some(item => item.name === plant.name)} 
                                             onClick={() => handleAddToCart(plant)}
-                                        >
-                                            {addedToCart[plant.name] ? "Added to Cart" : "Add to Cart"}
+                                          >
+                                            {cartItems.some(item => item.name === plant.name) ? "Added to Cart" : "Add to Cart"}
                                         </button>
                                     </div>
                                 ))}
