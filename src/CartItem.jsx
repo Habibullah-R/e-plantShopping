@@ -7,9 +7,11 @@ const CartItem = ({ onContinueShopping }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
+  // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
     let total = 0;
     cart.forEach(item => {
+      // Strips the '$' sign from string cost and casts to number before calculation
       const numericCost = parseFloat(item.cost.substring(1));
       total += numericCost * item.quantity;
     });
@@ -18,7 +20,7 @@ const CartItem = ({ onContinueShopping }) => {
 
   const handleContinueShopping = (e) => {
     e.preventDefault();
-    onContinueShopping(e); 
+    onContinueShopping(e); // Calls parent visibility switch handler
   };
 
   const handleCheckoutShopping = (e) => {
@@ -34,12 +36,13 @@ const CartItem = ({ onContinueShopping }) => {
     if (item.quantity > 1) {
       dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
     } else {
-      // If quantity would drop down to zero, remove item from state entirely
+      // If quantity hits 0, dispatches removeItem action to clear the product completely
       dispatch(removeItem(item.name));
     }
   };
 
   const handleRemove = (item) => {
+    // Dispatches removeItem action using the item name string as payload
     dispatch(removeItem(item.name));
   };
 
